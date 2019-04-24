@@ -4,12 +4,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +43,12 @@ public final class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        startAPICall("192.17.96.8");
+        startAPICall();
+        Button bigRedButton = findViewById((R.id.BigRedButton));
+        bigRedButton.setOnClickListener(v -> {
+            Log.e(TAG, "Big Red Button clicked");
+            printJson();
+        });
     }
 
     /**
@@ -50,15 +60,27 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *Printing JSON File.
+     *
+     * @return json string
+     */
+    protected String printJson() {
+        HttpHandler sh = new HttpHandler();
+
+        String url = "https://api.wheretheiss.at/v1/satellites/25544";
+        String jsonStr = sh.makeServiceCall(url);
+
+        return jsonStr;
+    }
+    /**
      * Make a call to the IP geolocation API.
      *
-     * @param ipAddress IP address to look up
      */
-    void startAPICall(final String ipAddress) {
+    void startAPICall() {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://ipinfo.io/" + ipAddress + "/json",
+                    "https://api.wheretheiss.at/v1/satellites/25544",
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -87,7 +109,13 @@ public final class MainActivity extends AppCompatActivity {
         try {
             Log.d(TAG, response.toString(2));
             // Example of how to pull a field off the returned JSON object
-            Log.i(TAG, response.get("hostname").toString());
-        } catch (JSONException ignored) { }
+            Log.i(TAG, response.get("name").toString());
+            TextView ipInfo = findViewById(R.id.JsonInfo);
+            ipInfo.setText(response.toString());
+            ipInfo.setVisibility(View.VISIBLE);
+            Log.i(TAG, response.getString("latitude"));
+
+        } catch (JSONException ignored) {
+        }
     }
 }

@@ -7,4 +7,18 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/BigRedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Big Red Button"
+        android:layout_marginLeft="1in"
+        android:background="@color/colorAccent"></Button>
+
+    <TextView
+        android:id="@+id/JsonInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"></TextView>
+
 </LinearLayout>
